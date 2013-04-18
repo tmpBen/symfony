@@ -1,0 +1,44 @@
+sudo chmod -R 777 /var/www/symfony/app/cache/* /var/www/symfony/app/logs/
+
+
+    // Récupération du service
+    $session = $this->get('session');
+    
+    
+##templating    
+    Le principe
+
+Le principe est simple : vous avez un template père qui contient le design de votre site ainsi que quelques trous (appelés « blocks » en anglais, que nous nommerons « blocs » en français) et des templates fils qui vont remplir ces blocs. Les fils vont donc venir hériter du père en remplaçant certains éléments par leur propre contenu.
+
+L'avantage est que les templates fils peuvent modifier plusieurs blocs du template père. Avec la technique des include(), un template inclus ne pourra pas modifier le template père dans un autre endroit que là où il est inclus !
+
+Les blocs classiques sont le centre de la page et le titre. Mais en fait, c'est à vous de les définir ; vous en ajouterez donc autant que vous voudrez.
+
+
+###composer
+
+
+Symfony 2 : command line tips
+
+Clear dev env cache :
+php app/console cache:clear
+
+Clear prod env cache :
+php app/console cache:clear --env=prod
+
+
+Download composer
+php -r "eval('?>'.file_get_contents('http://getcomposer.org/installer'));"
+
+update composer itself
+php composer.phar self-update
+
+
+Install git using apt : 
+sudo apt-get install git-core
+
+git version
+git version 1.7.9.5
+
+Update symfony : 
+php ../composer.phar update
