@@ -42,3 +42,36 @@ git version 1.7.9.5
 
 Update symfony : 
 php ../composer.phar update
+
+
+
+vendredi
+Generate an entity with symfony generator :
+php app/console generate:doctrine:entity
+
+Create database using Doctrine 2 : 
+php app/console doctrine:database:create
+
+
+Check the schema is up to date : 
+php app/console doctrine:schema:update --dump-sql
+
+Update the schema, create entities (executes sql queries on your database !): 
+php app/console doctrine:schema:update --force
+
+Modify en existing entity, for instance add/alter a field :
+First, add the attribute in the php class with his annotation 
+Then, ask doctrine to regenerate the modified entites : 
+php app/console doctrine:generate:entities MyBundle:MyEntity
+
+Then, check everything is ok :
+php app/console doctrine:schema:update --dump-sql
+
+Finally, perform update operations :
+php app/console doctrine:schema:update --force
+
+
+
+
+Database settings
+app/config/parameters.yml

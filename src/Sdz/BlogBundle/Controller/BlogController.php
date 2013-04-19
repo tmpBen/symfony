@@ -5,6 +5,7 @@ namespace Sdz\BlogBundle\Controller;
  
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Httpfoundation\Response;
+use Sdz\BlogBundle\Entity\Article;
  
 class BlogController extends Controller
 {
@@ -55,41 +56,57 @@ class BlogController extends Controller
 }
    
    
-public function voirAction($id)
-{
-  // …
- 
-  $article = array(
-    'id'      => 1,
-    'titre'   => 'Mon weekend a Phi Phi Island !',
-    'auteur'  => 'winzou',
-    'contenu' => 'Ce weekend était trop bien. Blabla…',
-    'date'    => new \Datetime()
-  );
-     
-  // Puis modifiez la ligne du render comme ceci, pour prendre en compte l'article :
-  return $this->render('SdzBlogBundle:Blog:voir.html.twig', array(
-    'article' => $article
-  ));
-}
+	public function voirAction($id)
+	{
+	  // On récupère le repository
+	  $repository = $this->getDoctrine()
+	                     ->getManager()
+	                     ->getRepository('SdzBlogBundle:Article');
+	 
+	  // On récupère l'entité correspondant à l'id $id
+	  $article = $repository->find($id);
+	 
+	  // $article est donc une instance de Sdz\BlogBundle\Entity\Article
+	 
+	  // Ou null si aucun article n'a été trouvé avec l'id $id
+	  if($article === null)
+	  {
+	    throw $this->createNotFoundException('Article[id='.$id.'] inexistant.');
+	  }
+	     
+	  return $this->render('SdzBlogBundle:Blog:voir.html.twig', array(
+	    'article' => $article
+	  ));
+	}
    
-  public function ajouterAction()
-  {
-    // La gestion d'un formulaire est particulière, mais l'idée est la suivante :
-     
-    if( $this->get('request')->getMethod() == 'POST' )
-    {
-      // Ici, on s'occupera de la création et de la gestion du formulaire
-       
-      $this->get('session')->getFlashBag()->add('notice', 'Article bien enregistré');
-     
-      // Puis on redirige vers la page de visualisation de cet article
-      return $this->redirect( $this->generateUrl('sdzblog_voir', array('id' => 5)) );
-    }
- 
-    // Si on n'est pas en POST, alors on affiche le formulaire
-    return $this->render('SdzBlogBundle:Blog:ajouter.html.twig');
-  }
+	public function ajouterAction()
+	{
+		// Création de l'entité
+		$article = new Article();
+		$article->setTitre('Mon dernier weekend');
+		$article->setAuteur('Bibi');
+		$article->setContenu("C'était vraiment super et on s'est bien amusé.");
+		// On peut ne pas définir ni la date ni la publication,
+		// car ces attributs sont définis automatiquement dans le constructeur
+	
+		// On récupère l'EntityManager
+		$em = $this->getDoctrine()->getManager();
+	
+		// Étape 1 : On « persiste » l'entité
+		$em->persist($article);
+	
+		// Étape 2 : On « flush » tout ce qui a été persisté avant
+		$em->flush();
+		 
+		// Reste de la méthode qu'on avait déjà écrit
+		if ($this->getRequest()->getMethod() == 'POST') {
+			$this->get('session')->getFlashBag()->add('info', 'Article bien enregistré');
+			return $this->redirect( $this->generateUrl('sdzblog_voir', array('id' => $article->getId())) );
+		}
+	
+		return $this->render('SdzBlogBundle:Blog:ajouter.html.twig',array(
+    'article' => $article));
+	}
  
   public function supprimerAction($id)
   {
