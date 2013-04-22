@@ -14,6 +14,16 @@ class Article
 {
 	
 	/**
+	 * @ORM\ManyToMany(targetEntity="Sdz\BlogBundle\Entity\Categorie", cascade={"persist"})
+	 */
+	private $categories;
+	
+	/**	
+ 	 * @ORM\OneToOne(targetEntity="Sdz\BlogBundle\Entity\Image", cascade={"persist"})
+ 	 */
+	private $image;
+	
+	/**
 	 * @ORM\Column(name="publication", type="boolean")
 	 */
 	private $publication;
@@ -25,6 +35,8 @@ class Article
 	{
 		$this->date = new \Datetime();
 		$this->publication = true;
+		$this->categories = new \Doctrine\Common\Collections\ArrayCollection();
+		
 	}
 	
     /**
@@ -189,4 +201,61 @@ class Article
     {
         return $this->publication;
     }
+
+    /**
+     * Set image
+     *
+     * @param \Sdz\BlogBundle\Entity\Image $image
+     * @return Article
+     */
+    public function setImage(\Sdz\BlogBundle\Entity\Image $image = null)
+    {
+        $this->image = $image;
+    
+        return $this;
+    }
+
+    /**
+     * Get image
+     *
+     * @return \Sdz\BlogBundle\Entity\Image 
+     */
+    public function getImage()
+    {
+        return $this->image;
+    }
+
+ 
+    /**
+     * Add categories
+     *
+     * @param Sdz\BlogBundle\Entity\Categorie $categories
+     */
+    public function addCategorie(\Sdz\BlogBundle\Entity\Categorie $categorie) // addCategorie sans « s » !
+    {
+    	// Ici, on utilise l'ArrayCollection vraiment comme un tableau, avec la syntaxe []
+    	$this->categories[] = $categorie;
+    }
+    
+    /**
+     * Remove categories
+     *
+     * @param Sdz\BlogBundle\Entity\Categorie $categories
+     */
+    public function removeCategorie(\Sdz\BlogBundle\Entity\Categorie $categorie) // removeCategorie sans « s » !
+    {
+    	// Ici on utilise une méthode de l'ArrayCollection, pour supprimer la catégorie en argument
+    	$this->categories->removeElement($categorie);
+    }
+    
+    /**
+     * Get categories
+     *
+     * @return Doctrine\Common\Collections\Collection
+     */
+    public function getCategories() // Notez le « s », on récupère une liste de catégories ici !
+    {
+    	return $this->categories;
+    }
+
 }
