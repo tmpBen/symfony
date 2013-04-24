@@ -239,6 +239,19 @@ public function voirAction($id)
     ));
   }
 
+
+  public function testrequeteAction ()
+  {
+	$results = $this->getDoctrine()
+    	             ->getManager()
+        	          ->getRepository('SdzBlogBundle:Article')
+            	      ->getTest();
+	
+	return $this->render('SdzBlogBundle:Blog:test.html.twig', array(
+			'results' => $results 
+	));
+  }
+  
   
   public function modifierAction($id)
   {

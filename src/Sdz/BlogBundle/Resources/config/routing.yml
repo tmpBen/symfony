@@ -25,3 +25,7 @@ sdzblog_supprimer:
     defaults:  { _controller: SdzBlogBundle:Blog:supprimer }
     requirements:
         id:  \d+
+        
+sdzblog_testrequete:
+    path:      /testrequete
+    defaults:  { _controller: SdzBlogBundle:Blog:testrequete }

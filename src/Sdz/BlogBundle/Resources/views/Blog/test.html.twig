@@ -1,0 +1,17 @@
+ {% extends "SdzBlogBundle::layout.html.twig" %}
+ 
+{% block title %}
+    Test {{ parent() }}
+{% endblock %}
+ 
+{% block sdzblog_body %}
+ 
+     {% for result in results %}
+      {{ result.titre }}
+      -- {{ result.auteur }}
+      -- {{ result.contenu }}
+      <br/>
+      {% if not loop.last %} - {% endif %}
+    {% endfor %}
+    
+ {% endblock %}
