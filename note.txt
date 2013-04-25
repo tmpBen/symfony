@@ -75,3 +75,17 @@ php app/console doctrine:schema:update --force
 
 Database settings
 app/config/parameters.yml
+
+
+Edit composer.json and add the target bundle :
+"stof/doctrine-extensions-bundle": "dev-master"
+
+Run composer from the shell :
+php composer.phar update
+
+Register the bundle in app/AppKernel.php :
+new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
+
+
+Remove from git index a reportory : 
+git rm -rf app/cache/

@@ -3,15 +3,23 @@
 namespace Sdz\BlogBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
+use Gedmo\Mapping\Annotation as Gedmo;
 /**
  * Article
  *
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="Sdz\BlogBundle\Entity\ArticleRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class Article
 {
+	
+	
+	/**
+	 * @Gedmo\Slug(fields={"titre"})
+	 * @ORM\Column(length=128, unique=true)
+	 */
+	private $slug;
 	
 	/**
 	 * @ORM\ManyToMany(targetEntity="Sdz\BlogBundle\Entity\Categorie", cascade={"persist"})
@@ -258,4 +266,35 @@ class Article
     	return $this->categories;
     }
 
+    
+    /**
+     * @ORM\PreUpdate
+     */
+    public function updateDate()
+    {
+    	$this->setDateEdition(new \Datetime());
+    }
+
+    /**
+     * Set slug
+     *
+     * @param string $slug
+     * @return Article
+     */
+    public function setSlug($slug)
+    {
+        $this->slug = $slug;
+    
+        return $this;
+    }
+
+    /**
+     * Get slug
+     *
+     * @return string 
+     */
+    public function getSlug()
+    {
+        return $this->slug;
+    }
 }

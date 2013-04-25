@@ -13,6 +13,7 @@ class BlogController extends Controller
 {
   public function indexAction($page)
   {
+  	$this->testAction() ; 
  
     // Les articles :
   $articles = array(
@@ -304,6 +305,20 @@ public function voirAction($id)
   	));
   }
 
+  
+  public function testAction()
+  {
+  	$article = new Article();
+  	$article->setTitre("L'histoire d'un bon weekend !");
+  	$article->setAuteur('ben');
+  	$article->setContenu('content') ;
+  
+  	$em = $this->getDoctrine()->getManager();
+  	$em->persist($article);
+  	$em->flush(); // C'est à ce moment qu'est généré le slug
+  
+  	return new Response('Slug généré : '.$article->getSlug()); // Affiche « Slug généré : l-histoire-d-un-bon-weekend »
+  }
 }
 
 

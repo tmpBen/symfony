@@ -3,15 +3,23 @@
 namespace Sdz\BlogBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
+use Gedmo\Mapping\Annotation as Gedmo;
 /**
  * Article
  *
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="Sdz\BlogBundle\Entity\ArticleRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class Article
 {
+	
+	
+	/**
+	 * @Gedmo\Slug(fields={"titre"})
+	 * @ORM\Column(length=128, unique=true)
+	 */
+	private $slug;
 	
 	/**
 	 * @ORM\ManyToMany(targetEntity="Sdz\BlogBundle\Entity\Categorie", cascade={"persist"})
@@ -35,6 +43,8 @@ class Article
 	{
 		$this->date = new \Datetime();
 		$this->publication = true;
+		$this->categories = new \Doctrine\Common\Collections\ArrayCollection();
+		
 	}
 	
     /**
@@ -221,5 +231,47 @@ class Article
     public function getImage()
     {
         return $this->image;
+    }
+
+ 
+    /**
+     * Add categories
+     *
+     * @param Sdz\BlogBundle\Entity\Categorie $categories
+     */
+    public function addCategorie(\Sdz\BlogBundle\Entity\Categorie $categorie) // addCategorie sans « s » !
+    {
+    	// Ici, on utilise l'ArrayCollection vraiment comme un tableau, avec la syntaxe []
+    	$this->categories[] = $categorie;
+    }
+    
+    /**
+     * Remove categories
+     *
+     * @param Sdz\BlogBundle\Entity\Categorie $categories
+     */
+    public function removeCategorie(\Sdz\BlogBundle\Entity\Categorie $categorie) // removeCategorie sans « s » !
+    {
+    	// Ici on utilise une méthode de l'ArrayCollection, pour supprimer la catégorie en argument
+    	$this->categories->removeElement($categorie);
+    }
+    
+    /**
+     * Get categories
+     *
+     * @return Doctrine\Common\Collections\Collection
+     */
+    public function getCategories() // Notez le « s », on récupère une liste de catégories ici !
+    {
+    	return $this->categories;
+    }
+
+    
+    /**
+     * @ORM\PreUpdate
+     */
+    public function updateDate()
+    {
+    	$this->setDateEdition(new \Datetime());
     }
 }
