@@ -69,8 +69,8 @@ class Article
   private $slug;
  
   /**
-   * @ORM\OneToOne(targetEntity="Sdz\BlogBundle\Entity\Image", cascade={"persist", "remove"})
-   */
+ 	* @ORM\OneToOne(targetEntity="Sdz\BlogBundle\Entity\Image", cascade={"persist"})   
+ 	*/
   private $image;
  
   /**

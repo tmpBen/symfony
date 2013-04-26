@@ -76,7 +76,7 @@ php app/console doctrine:schema:update --force
 Database settings
 app/config/parameters.yml
 
-
+#Symfony 2 : install and register a new bundle with composer
 Edit composer.json and add the target bundle :
 "stof/doctrine-extensions-bundle": "dev-master"
 
@@ -89,3 +89,7 @@ new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
 
 Remove from git index a reportory : 
 git rm -rf app/cache/
+
+#Symfony 2 : generate a form constructor with doctrine 2
+php app/console doctrine:generate:form SdzBlogBundle:Article
+The new ArticleType.php class file has been created under /var/www/symfony/src/Sdz/BlogBundle/Form/ArticleType.php.
